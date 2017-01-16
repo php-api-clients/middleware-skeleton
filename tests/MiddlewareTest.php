@@ -1,20 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace ApiClients\Tests\Middleware\Cache;
+namespace ApiClients\Tests\Middleware\Skeleton;
 
 use ApiClients\Middleware\Skeleton\Middleware;
 use ApiClients\Middleware\Skeleton\Options;
 use ApiClients\Tools\TestUtilities\TestCase;
-use Prophecy\Argument;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Factory;
 use RingCentral\Psr7\BufferStream;
 use RingCentral\Psr7\Request;
 use RingCentral\Psr7\Response;
 use function Clue\React\Block\await;
-use function React\Promise\reject;
-use function React\Promise\resolve;
 
 final class MiddlewareTest extends TestCase
 {
