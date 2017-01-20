@@ -1,6 +1,7 @@
 {
   "name": "api-clients/middleware-skeleton",
   "license": "MIT",
+  "authors": [],
   "require": {
     "php": "^7.0",
     "api-clients/middleware": "^1.0",
@@ -8,7 +9,7 @@
     "nikic/php-parser": "^3.0",
     "ocramius/package-versions": "^1.1",
     "ringcentral/psr7": "^1.2",
-    "symfony/console": "^3.2"
+    "symfony/console": "3.2.1"
   },
   "require-dev": {
     "api-clients/test-utilities": "^2.0"
@@ -58,8 +59,7 @@
       "if [ -f ./build/logs/clover.xml ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi"
     ],
     "post-create-project-cmd": [
-      "composer update",
-      "composer remove composer/composer nikic/php-parser ocramius/package-versions symfony/console",
+      "ApiClients\\Middleware\\Installer\\Installer::postCreateProject",
       "composer update"
     ]
   }
