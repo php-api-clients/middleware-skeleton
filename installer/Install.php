@@ -73,7 +73,7 @@ final class Install extends Command
                 $style->text('Creating your middleware package now.');
                 $style->section('Updating composer.json');
                 $this->updateComposerJson($replacements);
-                $style->text('Updated composer.jsor');
+                $style->text('Updated composer.json');
                 $style->success('Your middleware package creation has been successfully.');
 
                 break;
