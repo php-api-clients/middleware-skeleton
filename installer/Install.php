@@ -111,8 +111,8 @@ final class Install extends Command
         ];
 
         // Add autoload entries
-        $composerJson['autoload']['psr-4'][$replacements[self::NS_VENDOR] . '\\' . $replacements[self::NS_PROJECT]] = 'src/';
-        $composerJson['autoload-dev']['psr-4'][$replacements[self::NS_TESTS_VENDOR] . '\\' . $replacements[self::NS_PROJECT]] = 'tests/';
+        $composerJson['autoload']['psr-4'][$replacements[self::NS_VENDOR] . '\\' . $replacements[self::NS_PROJECT] . '\\'] = 'src/';
+        $composerJson['autoload-dev']['psr-4'][$replacements[self::NS_TESTS_VENDOR] . '\\' . $replacements[self::NS_PROJECT] . '\\'] = 'tests/';
 
         // Removed installer autoload, installer required package, and install command
         unset(
