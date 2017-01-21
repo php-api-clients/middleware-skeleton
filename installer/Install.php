@@ -292,10 +292,10 @@ final class Install extends Command
     {
         $style->section('Removing installer');
         unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Install.php');
-        $style->section('Removed Install.php');
+        $style->text('Removed Install.php');
         unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Installer.php');
-        $style->section('Removed Installer.php');
+        $style->text('Removed Installer.php');
         rmdir(__DIR__);
-        $style->section('Removed installer directory');
+        $style->text('Removed installer directory');
     }
 }
