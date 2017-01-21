@@ -89,6 +89,7 @@ final class Install extends Command
                 $style->text('Creating your middleware package now.');
                 $this->updateComposerJson($replacements, $style);
                 $this->updatePHPFiles($replacements, $style);
+                $this->removingOurSelfs($style);
                 $style->success('Your middleware package creation has been successfully.');
 
                 break;
@@ -285,5 +286,16 @@ final class Install extends Command
         }
 
         return $fixers;
+    }
+
+    private function removingOurSelfs(SymfonyStyle $style)
+    {
+        $style->section('Removing installer');
+        unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Install.php');
+        $style->section('Removed Install.php');
+        unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Installer.php');
+        $style->section('Removed Installer.php');
+        rmdir(__DIR__);
+        $style->section('Removed installer directory');
     }
 }
