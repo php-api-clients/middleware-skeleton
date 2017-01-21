@@ -152,6 +152,7 @@ final class Install extends Command
     private function updatePHPFiles(array $replacements, SymfonyStyle $style)
     {
         $style->section('Updating namespaces in PHP files');
+        $this->setUpFixers();
         $path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
         foreach([
             'src' => self::NS_VENDOR,
