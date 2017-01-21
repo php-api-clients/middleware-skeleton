@@ -165,6 +165,7 @@ final class Install extends Command
                 $replacements[$namespace] . '\\' . $replacements[self::NS_PROJECT]
             );
         }
+        $style->success('Namespaces updated');
     }
 
     private function iterateDirectory(string $path, SymfonyStyle $style, string $namespace)
@@ -297,5 +298,6 @@ final class Install extends Command
         $style->text('Removed Installer.php');
         rmdir(__DIR__);
         $style->text('Removed installer directory');
+        $style->success('Installer removed');
     }
 }
