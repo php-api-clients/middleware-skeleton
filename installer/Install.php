@@ -182,6 +182,7 @@ final class Install extends Command
 
     private function updateNamespace(string $fileName, string $namespace)
     {
+        $md5 = md5_file($fileName);
         $stmts = (new ParserFactory())->create(ParserFactory::ONLY_PHP7)->parse(file_get_contents($fileName));
         if ($stmts === null) {
             return;
@@ -201,6 +202,10 @@ final class Install extends Command
             break;
         }
         file_put_contents($fileName, (new Standard())->prettyPrintFile($stmts) . PHP_EOL);
+        while($md5 === md5_file($fileName)) {
+            usleep(500);
+        }
+        $this->applyPsr2($fileName);
     }
 
 
