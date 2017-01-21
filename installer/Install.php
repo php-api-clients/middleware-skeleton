@@ -182,7 +182,9 @@ final class Install extends Command
             $stmts[$index] = new Namespace_(
                 new Name(
                     $namespace
-                )
+                ),
+                $node->stmts,
+                $node->getAttributes()
             );
             break;
         }
