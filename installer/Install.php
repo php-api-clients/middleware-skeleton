@@ -188,6 +188,6 @@ final class Install extends Command
             );
             break;
         }
-        file_put_contents($fileName, (new Standard())->prettyPrintFile($stmts));
+        file_put_contents($fileName, (new Standard())->prettyPrintFile($stmts) . PHP_EOL);
     }
 }
