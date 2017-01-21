@@ -13,6 +13,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\CS\AbstractFixer;
+use Symfony\CS\Config\Config;
+use Symfony\CS\ConfigAwareInterface;
+use Symfony\CS\ConfigInterface;
+use Symfony\CS\Fixer;
+use Symfony\CS\FixerInterface;
 
 final class Install extends Command
 {
@@ -25,6 +31,11 @@ final class Install extends Command
     const AUTHOR          = '__AUTHOR__';
     const AUTHOR_NAME     = '__AUTHOR_NAME__';
     const AUTHOR_EMAIL    = '__AUTHOR_EMAIL__';
+
+    /**
+     * @var AbstractFixer[]
+     */
+    private $fixers;
 
     protected function execute( InputInterface $input, OutputInterface $output )
     {
@@ -126,6 +137,7 @@ final class Install extends Command
             $composerJson['autoload']['psr-4']['ApiClients\\Middleware\\Skeleton\\'],
             $composerJson['autoload-dev']['psr-4']['ApiClients\\Tests\\Middleware\\Skeleton\\'],
             $composerJson['require']['composer/composer'],
+            $composerJson['require']['friendsofphp/php-cs-fixer'],
             $composerJson['require']['nikic/php-parser'],
             $composerJson['require']['ocramius/package-versions'],
             $composerJson['require']['symfony/console'],
@@ -189,5 +201,83 @@ final class Install extends Command
             break;
         }
         file_put_contents($fileName, (new Standard())->prettyPrintFile($stmts) . PHP_EOL);
+    }
+
+
+    /**
+     * @param string $fileName
+     */
+    protected function applyPsr2(string $fileName)
+    {
+        $file = new \SplFileInfo($fileName);
+        $new = file_get_contents($file->getRealPath());
+
+        foreach ($this->fixers as $fixer) {
+            if (!$fixer->supports($file)) {
+                continue;
+            }
+
+            $new = $fixer->fix($file, $new);
+        }
+
+        file_put_contents(
+            $fileName,
+            str_replace(
+                '<?php',
+                '<?php declare(strict_types=1);',
+                $new
+            )
+        );
+    }
+
+    protected function setUpFixers()
+    {
+        $fixer = new Fixer();
+        $fixer->registerCustomFixers([
+            new Fixer\Symfony\ExtraEmptyLinesFixer(),
+            new Fixer\Symfony\SingleBlankLineBeforeNamespaceFixer(),
+            new Fixer\PSR0\Psr0Fixer(),
+            new Fixer\PSR1\EncodingFixer(),
+            new Fixer\PSR1\ShortTagFixer(),
+            new Fixer\PSR2\BracesFixer(),
+            new Fixer\PSR2\ElseifFixer(),
+            new Fixer\PSR2\EofEndingFixer(),
+            new Fixer\PSR2\FunctionCallSpaceFixer(),
+            new Fixer\PSR2\FunctionDeclarationFixer(),
+            new Fixer\PSR2\IndentationFixer(),
+            new Fixer\PSR2\LineAfterNamespaceFixer(),
+            new Fixer\PSR2\LinefeedFixer(),
+            new Fixer\PSR2\LowercaseConstantsFixer(),
+            new Fixer\PSR2\LowercaseKeywordsFixer(),
+            new Fixer\PSR2\MethodArgumentSpaceFixer(),
+            new Fixer\PSR2\MultipleUseFixer(),
+            new Fixer\PSR2\ParenthesisFixer(),
+            new Fixer\PSR2\PhpClosingTagFixer(),
+            new Fixer\PSR2\SingleLineAfterImportsFixer(),
+            new Fixer\PSR2\TrailingSpacesFixer(),
+            new Fixer\PSR2\VisibilityFixer(),
+            new Fixer\Contrib\NewlineAfterOpenTagFixer(),
+        ]);
+        $config = Config::create()->fixers($fixer->getFixers());
+        $fixer->addConfig($config);
+        $this->fixers = $this->prepareFixers($config);
+    }
+
+    /**
+     * @param ConfigInterface $config
+     *
+     * @return FixerInterface[]
+     */
+    private function prepareFixers(ConfigInterface $config): array
+    {
+        $fixers = $config->getFixers();
+
+        foreach ($fixers as $fixer) {
+            if ($fixer instanceof ConfigAwareInterface) {
+                $fixer->setConfig($config);
+            }
+        }
+
+        return $fixers;
     }
 }
