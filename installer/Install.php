@@ -4,6 +4,11 @@ namespace ApiClients\Middleware\Installer;
 
 use Composer\Factory;
 use Composer\Json\JsonFile;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Parser;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -71,9 +76,8 @@ final class Install extends Command
             case 'Yes':
             {
                 $style->text('Creating your middleware package now.');
-                $style->section('Updating composer.json');
-                $this->updateComposerJson($replacements);
-                $style->text('Updated composer.json');
+                $this->updateComposerJson($replacements, $style);
+                $this->updatePHPFiles($replacements, $style);
                 $style->success('Your middleware package creation has been successfully.');
 
                 break;
@@ -94,15 +98,17 @@ final class Install extends Command
         return 0;
     }
 
-    private function updateComposerJson(array $replacements)
+    private function updateComposerJson(array $replacements, SymfonyStyle $style)
     {
+        $style->section('Updating composer.json');
         $json = new JsonFile(Factory::getComposerFile());
+        $style->text('Reading composer.json');
         $composerJson = $json->read();
 
-        // Replace name
+        $style->text('Replacing package name');
         $composerJson['name'] = $replacements[self::PACKAGE_NAME];
 
-        // Replace authors
+        $style->text('Adding authors');
         $composerJson['authors'] = [
             [
                 'name'  => $replacements[self::AUTHOR_NAME],
@@ -110,11 +116,11 @@ final class Install extends Command
             ],
         ];
 
-        // Add autoload entries
+        $style->text('Updating autoload');
         $composerJson['autoload']['psr-4'][$replacements[self::NS_VENDOR] . '\\' . $replacements[self::NS_PROJECT] . '\\'] = 'src/';
         $composerJson['autoload-dev']['psr-4'][$replacements[self::NS_TESTS_VENDOR] . '\\' . $replacements[self::NS_PROJECT] . '\\'] = 'tests/';
 
-        // Removed installer autoload, installer required package, and install command
+        $style->text('Removing package needed for installation and post create script');
         unset(
             $composerJson['autoload']['psr-4']['ApiClients\\Middleware\\Installer\\'],
             $composerJson['autoload']['psr-4']['ApiClients\\Middleware\\Skeleton\\'],
@@ -126,6 +132,59 @@ final class Install extends Command
             $composerJson['scripts']['post-create-project-cmd']
         );
 
+        $style->text('Writing updated composer.json');
         $json->write($composerJson);
+        $style->success('Updated composer.json');
+    }
+
+    private function updatePHPFiles(array $replacements, SymfonyStyle $style)
+    {
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+        foreach([
+            'src' => self::NS_VENDOR,
+            'tests' => self::NS_TESTS_VENDOR,
+        ] as $dir => $namespace) {
+            $this->iterateDirectory(
+                $path . $dir . DIRECTORY_SEPARATOR,
+                $style,
+                $replacements[$namespace] . '\\' . $replacements[self::NS_PROJECT]
+            );
+        }
+    }
+
+    private function iterateDirectory(string $path, SymfonyStyle $style, string $namespace)
+    {
+        $d = dir($path);
+        while (false !== ($entry = $d->read())) {
+            $entryPath = $path . $entry;
+            if (!is_file($entryPath)) {
+                continue;
+            }
+
+            $style->text('Updating ' . $entry . ' namespace');
+            $this->updateNamespace($entryPath, $namespace);
+        }
+        $d->close();
+    }
+
+    private function updateNamespace(string $fileName, string $namespace)
+    {
+        $stmts = (new ParserFactory())->create(ParserFactory::ONLY_PHP7)->parse(file_get_contents($fileName));
+        if ($stmts === null) {
+            return;
+        }
+        foreach ($stmts as $index => $node) {
+            if (!($node instanceof Namespace_)) {
+                continue;
+            }
+
+            $stmts[$index] = new Namespace_(
+                new Name(
+                    $namespace
+                )
+            );
+            break;
+        }
+        file_put_contents($fileName, (new Standard())->prettyPrintFile($stmts));
     }
 }
