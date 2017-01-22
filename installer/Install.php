@@ -6,6 +6,7 @@ use Composer\Factory;
 use Composer\Json\JsonFile;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
@@ -90,7 +91,7 @@ final class Install extends Command
                 $this->updateComposerJson($replacements, $style);
                 $this->updatePHPFiles($replacements, $style);
                 $this->removingOurSelfs($style);
-                $style->success('Your middleware package creation has been successfully.');
+                $style->section('Your middleware package creation has been successfully.');
 
                 break;
             }
@@ -178,12 +179,12 @@ final class Install extends Command
             }
 
             $style->text('Updating ' . $entry . ' namespace');
-            $this->updateNamespace($entryPath, $namespace);
+            $this->updateNamespaces($entryPath, $namespace);
         }
         $d->close();
     }
 
-    private function updateNamespace(string $fileName, string $namespace)
+    private function updateNamespaces(string $fileName, string $namespace)
     {
         $md5 = md5_file($fileName);
         $stmts = (new ParserFactory())->create(ParserFactory::ONLY_PHP7)->parse(file_get_contents($fileName));
@@ -195,11 +196,30 @@ final class Install extends Command
                 continue;
             }
 
+            $nodeStmts = $node->stmts;
+
+            foreach ($nodeStmts as $nodeIndex => $nodeNode) {
+                if (!($nodeNode instanceof Use_)) {
+                    continue;
+                }
+
+                foreach ($nodeNode->uses as $useUse) {
+                    $nameString = $useUse->name->toString();
+                    if (strpos($nameString, 'ApiClients\\Middleware\\Skeleton') !== 0) {
+                        continue;
+                    }
+
+                    $useUse->name = new Name(
+                        $namespace . substr($nameString, strlen('ApiClients\\Middleware\\Skeleton'))
+                    );
+                }
+            }
+
             $stmts[$index] = new Namespace_(
                 new Name(
                     $namespace
                 ),
-                $node->stmts,
+                $nodeStmts,
                 $node->getAttributes()
             );
             break;
