@@ -163,13 +163,14 @@ final class Install extends Command
             $this->iterateDirectory(
                 $path . $dir . DIRECTORY_SEPARATOR,
                 $style,
-                $replacements[$namespace] . '\\' . $replacements[self::NS_PROJECT]
+                $replacements[$namespace] . '\\' . $replacements[self::NS_PROJECT],
+                $replacements[self::NS_VENDOR] . '\\' . $replacements[self::NS_PROJECT]
             );
         }
         $style->success('Namespaces updated');
     }
 
-    private function iterateDirectory(string $path, SymfonyStyle $style, string $namespace)
+    private function iterateDirectory(string $path, SymfonyStyle $style, string $namespace, string $namespaceSrc)
     {
         $d = dir($path);
         while (false !== ($entry = $d->read())) {
@@ -179,12 +180,12 @@ final class Install extends Command
             }
 
             $style->text('Updating ' . $entry . ' namespace');
-            $this->updateNamespaces($entryPath, $namespace);
+            $this->updateNamespaces($entryPath, $namespace, $namespaceSrc);
         }
         $d->close();
     }
 
-    private function updateNamespaces(string $fileName, string $namespace)
+    private function updateNamespaces(string $fileName, string $namespace, string $namespaceSrc)
     {
         $md5 = md5_file($fileName);
         $stmts = (new ParserFactory())->create(ParserFactory::ONLY_PHP7)->parse(file_get_contents($fileName));
@@ -210,7 +211,7 @@ final class Install extends Command
                     }
 
                     $useUse->name = new Name(
-                        $namespace . substr($nameString, strlen('ApiClients\\Middleware\\Skeleton'))
+                        $namespaceSrc . substr($nameString, strlen('ApiClients\\Middleware\\Skeleton'))
                     );
                 }
             }
