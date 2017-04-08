@@ -1,7 +1,6 @@
 # API Client skeleton middleware for PHP 7.x
 
-[![Build Status](https://travis-ci.org/php-api-clients/middleware-skeleton.svg?branch=master)](https://travis-ci
-.org/php-api-clients/middleware-skeleton)
+[![Build Status](https://travis-ci.org/php-api-clients/middleware-skeleton.svg?branch=master)](https://travis-ci.org/php-api-clients/middleware-skeleton)
 [![Latest Stable Version](https://poser.pugx.org/api-clients/middleware-skeleton/v/stable.png)](https://packagist.org/packages/api-clients/middleware-skeleton)
 [![Total Downloads](https://poser.pugx.org/api-clients/middleware-skeleton/downloads.png)](https://packagist.org/packages/api-clients/middleware-skeleton/stats)
 [![Code Coverage](https://scrutinizer-ci.com/g/php-api-clients/middleware-skeleton/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/php-api-clients/middleware-skeleton/?branch=master)
