@@ -18,8 +18,8 @@ final class Middleware implements MiddlewareInterface
      * When implementing cache or other feature that returns a response, do it with a rejected promise.
      * If neither is possible, e.g. on some kind of failure, resolve the unaltered request.
      *
-     * @param RequestInterface $request
-     * @param array $options
+     * @param  RequestInterface            $request
+     * @param  array                       $options
      * @return CancellablePromiseInterface
      */
     public function pre(RequestInterface $request, array $options = []): CancellablePromiseInterface
@@ -31,8 +31,8 @@ final class Middleware implements MiddlewareInterface
     /**
      * Return the processed $response via a promise.
      *
-     * @param ResponseInterface $response
-     * @param array $options
+     * @param  ResponseInterface           $response
+     * @param  array                       $options
      * @return CancellablePromiseInterface
      */
     public function post(ResponseInterface $response, array $options = []): CancellablePromiseInterface
@@ -44,8 +44,8 @@ final class Middleware implements MiddlewareInterface
     /**
      * Deal with possible errors that occurred during request/response events.
      *
-     * @param Throwable $throwable
-     * @param array $options
+     * @param  Throwable                   $throwable
+     * @param  array                       $options
      * @return CancellablePromiseInterface
      */
     public function error(Throwable $throwable, array $options = []): CancellablePromiseInterface

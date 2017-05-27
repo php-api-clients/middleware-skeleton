@@ -20,7 +20,7 @@ final class MiddlewareTest extends TestCase
 
         $options = [
             Middleware::class => [
-                Options::MY_OPTION => 'Foo'
+                Options::MY_OPTION => 'Foo',
             ],
         ];
 
@@ -41,7 +41,7 @@ final class MiddlewareTest extends TestCase
 
         $options = [
             Middleware::class => [
-                Options::MY_OPTION => 'Foo'
+                Options::MY_OPTION => 'Foo',
             ],
         ];
 
