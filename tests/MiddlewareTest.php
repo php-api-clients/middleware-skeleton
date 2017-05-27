@@ -56,7 +56,6 @@ final class MiddlewareTest extends TestCase
     public function testError()
     {
         self::expectException(Exception::class);
-        $middleware = new Middleware();
-        await($middleware->error(new Exception(), []), Factory::create());
+        (new Middleware())->error(new Exception(), [])->done();
     }
 }
