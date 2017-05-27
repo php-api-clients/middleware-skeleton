@@ -5,6 +5,7 @@ namespace ApiClients\Tests\Middleware\Skeleton;
 use ApiClients\Middleware\Skeleton\Middleware;
 use ApiClients\Middleware\Skeleton\Options;
 use ApiClients\Tools\TestUtilities\TestCase;
+use Exception;
 use React\EventLoop\Factory;
 use RingCentral\Psr7\BufferStream;
 use RingCentral\Psr7\Request;
@@ -50,5 +51,12 @@ final class MiddlewareTest extends TestCase
 
         self::assertSame($response->getStatusCode(), $responseObject->getStatusCode());
         self::assertSame($body, $responseObject->getBody()->getContents());
+    }
+
+    public function testError()
+    {
+        self::expectException(Exception::class);
+        $middleware = new Middleware();
+        await($middleware->error(new Exception(), []), Factory::create());
     }
 }
