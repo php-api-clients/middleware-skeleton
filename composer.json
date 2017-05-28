@@ -1,5 +1,6 @@
 {
   "name": "api-clients/middleware-skeleton",
+  "description": "Middleware Skeleton for API Clients",
   "license": "MIT",
   "authors": [],
   "require": {
