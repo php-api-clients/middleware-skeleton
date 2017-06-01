@@ -10,7 +10,7 @@ env:
   current_ns: "ApiClients\\Middleware\\Skeleton"
   current_ns_tests: "ApiClients\\Tests\\Middleware\\Skeleton"
   require:
-    - installer
+    - api-clients/installer
   scripts:
     - post-create-project-cmd
 questions:
