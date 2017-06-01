@@ -84,6 +84,7 @@
       "ApiClients\\Tools\\Installer\\Installer::postCreateProject",
       "composer update --no-autoloader",
       "composer update",
+      "@cs-fix",
       "@qa-all"
     ]
   }
