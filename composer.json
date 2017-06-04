@@ -5,7 +5,7 @@
   "authors": [],
   "require": {
     "php": "^7.0",
-    "api-clients/installer": "dev-master",
+    "api-clients/installer": "^1.0",
     "api-clients/middleware": "^2.0",
     "ringcentral/psr7": "^1.2"
   },

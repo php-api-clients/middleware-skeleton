@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a10d1fee2079de9a7a7a9320f410f2bb",
+    "content-hash": "f2f0e7625d1a779f27525c0c1ab8d00e",
     "packages": [
         {
             "name": "api-clients/branding",
@@ -35,16 +35,16 @@
         },
         {
             "name": "api-clients/installer",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-api-clients/installer.git",
-                "reference": "27ed7cfc783eeb35e95cf3e1e2b0149b2921001c"
+                "reference": "7d93208a2332134f46f40d39e0404ab368e8ca99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-api-clients/installer/zipball/27ed7cfc783eeb35e95cf3e1e2b0149b2921001c",
-                "reference": "27ed7cfc783eeb35e95cf3e1e2b0149b2921001c",
+                "url": "https://api.github.com/repos/php-api-clients/installer/zipball/7d93208a2332134f46f40d39e0404ab368e8ca99",
+                "reference": "7d93208a2332134f46f40d39e0404ab368e8ca99",
                 "shasum": ""
             },
             "require": {
@@ -63,9 +63,6 @@
             "require-dev": {
                 "api-clients/test-utilities": "^4.1"
             },
-            "bin": [
-                "bin/installer"
-            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -82,7 +79,8 @@
                     "email": "ceesjank@gmail.com"
                 }
             ],
-            "time": "2017-06-01 05:51:03"
+            "description": "YAML based project installer",
+            "time": "2017-06-04T17:31:17+00:00"
         },
         {
             "name": "api-clients/middleware",
@@ -3948,9 +3946,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "api-clients/installer": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
