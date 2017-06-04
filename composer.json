@@ -82,8 +82,8 @@
     ],
     "post-create-project-cmd": [
       "ApiClients\\Tools\\Installer\\Installer::postCreateProject",
-      "composer update --no-autoloader",
-      "composer update",
+      "composer update --no-autoloader --ansi",
+      "composer update --ansi",
       "@cs-fix",
       "@qa-all"
     ]
