@@ -25,7 +25,7 @@ final class MiddlewareTest extends TestCase
         ];
 
         $middleware = new Middleware();
-        $response = await($middleware->pre($request, $options), Factory::create());
+        $response = await($middleware->pre($request, 'abc', $options), Factory::create());
 
         self::assertSame($request, $response);
     }
@@ -46,8 +46,8 @@ final class MiddlewareTest extends TestCase
         ];
 
         $middleware = new Middleware();
-        $middleware->pre($request, $options);
-        $responseObject = await($middleware->post($response, $options), Factory::create());
+        $middleware->pre($request, 'abc', $options);
+        $responseObject = await($middleware->post($response, 'abc', $options), Factory::create());
 
         self::assertSame($response->getStatusCode(), $responseObject->getStatusCode());
         self::assertSame($body, $responseObject->getBody()->getContents());
@@ -56,6 +56,6 @@ final class MiddlewareTest extends TestCase
     public function testError()
     {
         self::expectException(Exception::class);
-        (new Middleware())->error(new Exception(), [])->done();
+        (new Middleware())->error(new Exception(), 'abc', [])->done();
     }
 }
