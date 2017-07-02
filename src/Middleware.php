@@ -3,7 +3,6 @@
 namespace ApiClients\Middleware\Skeleton;
 
 use ApiClients\Foundation\Middleware\MiddlewareInterface;
-use ApiClients\Foundation\Middleware\Priority;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\CancellablePromiseInterface;
@@ -22,8 +21,11 @@ final class Middleware implements MiddlewareInterface
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
-    public function pre(RequestInterface $request, array $options = []): CancellablePromiseInterface
-    {
+    public function pre(
+        RequestInterface $request,
+        string $transactionId,
+        array $options = []
+    ): CancellablePromiseInterface {
         // TODO: Implement pre() method or add PreTrait and remove this method
         return resolve($request);
     }
@@ -35,8 +37,11 @@ final class Middleware implements MiddlewareInterface
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
-    public function post(ResponseInterface $response, array $options = []): CancellablePromiseInterface
-    {
+    public function post(
+        ResponseInterface $response,
+        string $transactionId,
+        array $options = []
+    ): CancellablePromiseInterface {
         // TODO: Implement post() method. Or add PostTrait and remove this method
         return resolve($response);
     }
@@ -48,21 +53,12 @@ final class Middleware implements MiddlewareInterface
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
-    public function error(Throwable $throwable, array $options = []): CancellablePromiseInterface
-    {
+    public function error(
+        Throwable $throwable,
+        string $transactionId,
+        array $options = []
+    ): CancellablePromiseInterface {
         // TODO: Implement error() method. Or add ErrorTrait and remove this method
         return reject($throwable);
-    }
-
-    /**
-     * Priority ranging from 0 to 1000. Where 1000 will be executed first on `pre` and 0 last on `pre`.
-     * For `post` the order is reversed.
-     *
-     * @return int
-     */
-    public function priority(): int
-    {
-        // TODO: Implement priority() method or add DefaultPriorityTrait and remove this method
-        return Priority::DEFAULT;
     }
 }
