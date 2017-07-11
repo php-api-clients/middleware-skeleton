@@ -18,6 +18,7 @@ final class Middleware implements MiddlewareInterface
      * If neither is possible, e.g. on some kind of failure, resolve the unaltered request.
      *
      * @param  RequestInterface            $request
+     * @param  string                      $transactionId
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
@@ -34,6 +35,7 @@ final class Middleware implements MiddlewareInterface
      * Return the processed $response via a promise.
      *
      * @param  ResponseInterface           $response
+     * @param  string                      $transactionId
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
@@ -50,6 +52,7 @@ final class Middleware implements MiddlewareInterface
      * Deal with possible errors that occurred during request/response events.
      *
      * @param  Throwable                   $throwable
+     * @param  string                      $transactionId
      * @param  array                       $options
      * @return CancellablePromiseInterface
      */
